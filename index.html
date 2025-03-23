@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soil Scanner Car Control</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>🚜 Soil Scanner Car Control 🌱</h1>
+
+    <button id="connectBtn">🔵 Connect Bluetooth</button>
+
+    <div class="controls">
+        <button id="forward">⬆️</button>
+        <div class="middle">
+            <button id="left">⬅️</button>
+            <button id="stop">⏺️</button>
+            <button id="right">➡️</button>
+        </div>
+        <button id="backward">⬇️</button>
+    </div>
+
+    <button id="insertSensor">📍 Insert Sensor</button>
+
+    <h2>📊 Soil Data</h2>
+    <p>Moisture: <span id="moisture">--%</span></p>
+    <p>Temperature: <span id="temperature">--°C</span></p>
+    <p>Humidity: <span id="humidity">--%</span></p>
+
+    <script src="script.js"></script>
+</body>
+</html>
