@@ -1,41 +1,78 @@
-let bluetoothDevice;
-let soilDataCharacteristic;
+document.addEventListener("DOMContentLoaded", function() {
+    let bluetoothDevice;
+    let gattServer;
+    let txCharacteristic;
 
-document.getElementById("connectBtn").addEventListener("click", async function() {
-    try {
-        bluetoothDevice = await navigator.bluetooth.requestDevice({
-            acceptAllDevices: true,
-            optionalServices: ['12345678-1234-5678-1234-56789abcdef0'] // Replace with Arduino's actual UUID
+    const SERVICE_UUID = "0000ffe0-0000-1000-8000-00805f9b34fb"; // Correct BLE UUID
+    const CHARACTERISTIC_UUID = "0000ffe1-0000-1000-8000-00805f9b34fb";
+
+    async function connectBluetooth() {
+        try {
+            bluetoothDevice = await navigator.bluetooth.requestDevice({
+                acceptAllDevices: true,
+                optionalServices: [SERVICE_UUID]
+            });
+
+            gattServer = await bluetoothDevice.gatt.connect();
+            const service = await gattServer.getPrimaryService(SERVICE_UUID);
+            txCharacteristic = await service.getCharacteristic(CHARACTERISTIC_UUID);
+
+            alert("Bluetooth Connected!");
+        } catch (error) {
+            alert("Failed to connect: " + error.message);
+        }
+    }
+
+    function sendBluetoothCommand(command) {
+        if (!txCharacteristic) {
+            alert("Bluetooth not connected!");
+            return;
+        }
+        const commandBuffer = new TextEncoder().encode(command);
+        txCharacteristic.writeValue(commandBuffer).catch(error => {
+            console.error("Error sending command:", error);
         });
-
-        const server = await bluetoothDevice.gatt.connect();
-        const service = await server.getPrimaryService('12345678-1234-5678-1234-56789abcdef0');
-        soilDataCharacteristic = await service.getCharacteristic('abcdef12-3456-7890-abcd-ef1234567890');
-
-        alert("Bluetooth Connected!");
-    } catch (error) {
-        alert("Failed to connect: " + error);
-    }
-});
-
-// Read soil data only when "Insert Sensor" button is clicked
-document.getElementById("insertSensor").addEventListener("click", async function() {
-    if (!soilDataCharacteristic) {
-        alert("Please connect to Bluetooth first!");
-        return;
     }
 
-    try {
-        const value = await soilDataCharacteristic.readValue();
-        let decoder = new TextDecoder("utf-8");
-        let soilData = decoder.decode(value).split(","); // Expecting data format: "45,22,60"
-
-        document.getElementById("moisture").innerText = soilData[0] + "%";
-        document.getElementById("temperature").innerText = soilData[1] + "°C";
-        document.getElementById("humidity").innerText = soilData[2] + "%";
-
-        alert("Soil data updated!");
-    } catch (error) {
-        alert("Error reading soil data: " + error);
+    function handleButtonPress(command, element) {
+        sendBluetoothCommand(command);
+        element.classList.add("active");
     }
+
+    function handleButtonRelease(element) {
+        element.classList.remove("active");
+    }
+
+    // Attach event listeners after DOM is loaded
+    document.getElementById("connect-btn").addEventListener("click", connectBluetooth);
+    document.getElementById("forward-btn").addEventListener("mousedown", function() {
+        handleButtonPress("F", this);
+    });
+    document.getElementById("forward-btn").addEventListener("mouseup", function() {
+        handleButtonRelease(this);
+    });
+    document.getElementById("backward-btn").addEventListener("mousedown", function() {
+        handleButtonPress("B", this);
+    });
+    document.getElementById("backward-btn").addEventListener("mouseup", function() {
+        handleButtonRelease(this);
+    });
+    document.getElementById("left-btn").addEventListener("mousedown", function() {
+        handleButtonPress("L", this);
+    });
+    document.getElementById("left-btn").addEventListener("mouseup", function() {
+        handleButtonRelease(this);
+    });
+    document.getElementById("right-btn").addEventListener("mousedown", function() {
+        handleButtonPress("R", this);
+    });
+    document.getElementById("right-btn").addEventListener("mouseup", function() {
+        handleButtonRelease(this);
+    });
+
+    document.getElementById("sense-soil-btn").addEventListener("click", function() {
+        sendBluetoothCommand("S");
+        this.classList.add("active");
+        setTimeout(() => this.classList.remove("active"), 500);
+    });
 });
