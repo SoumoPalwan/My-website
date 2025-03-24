@@ -1,47 +1,96 @@
+/* General Styles */
 body {
     font-family: Arial, sans-serif;
     text-align: center;
-    background-color: #1e1e1e; /* Modern dark theme */
+    background-color: #0D1B2A; /* Dark blue background */
     color: white;
+    margin: 0;
     padding: 20px;
 }
 
 h1 {
-    font-size: 24px;
-    color: #ffcc00;
+    color: #4CAF50;
 }
 
-button {
-    background-color: #ff6600; /* Bold modern button color */
+/* Bluetooth Button */
+.bluetooth-btn {
+    background-color: #1E88E5;
     color: white;
-    padding: 12px 18px;
-    margin: 5px;
-    border: none;
-    border-radius: 8px;
+    padding: 12px 25px;
     font-size: 18px;
+    border: none;
+    border-radius: 5px;
     cursor: pointer;
 }
 
-.controls {
+.bluetooth-btn:active {
+    background-color: #1565C0;
+}
+
+/* Control Button Styles */
+.control-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 20px 0;
+    margin-top: 20px;
 }
 
-.middle {
+.middle-row {
     display: flex;
     justify-content: center;
-    gap: 10px;
+    gap: 15px;
+    margin: 10px 0;
 }
 
-.controls button {
+.control-btn {
     width: 60px;
     height: 60px;
-    font-size: 22px;
-    margin: 8px;
+    font-size: 24px;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
 }
 
-#stop {
-    background-color: red;
+.up {
+    background-color: #3498db; /* Blue */
+}
+
+.left, .right {
+    background-color: #f1c40f; /* Yellow */
+}
+
+.stop {
+    background-color: #8e44ad; /* Purple */
+}
+
+.down {
+    background-color: #e74c3c; /* Red */
+}
+
+/* Sense Soil Button */
+.sense-btn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px 30px;
+    font-size: 18px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.sense-btn:active {
+    background-color: #388E3C;
+}
+
+/* Soil Data Box */
+.data-container {
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 15px;
+    border-radius: 10px;
+    margin-top: 20px;
+    display: inline-block;
+}
+
+h2 {
+    color: white;
 }
